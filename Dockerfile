@@ -17,10 +17,16 @@ RUN apt update && \
     software-properties-common && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && \
-    rm -rf /var/lib/apt/lists/*
-
+    rm -rf /var/lib/apt/lists/* && \
+# setup newrelic     
+    curl -L https://download.newrelic.com/php_agent/release/newrelic-php5-8.7.0.242-linux.tar.gz | tar -C /tmp -zx && \
+        export NR_INSTALL_USE_CP_NOT_LN=1 && \
+        export NR_INSTALL_SILENT=1 && \
+        /tmp/newrelic-php5-*/newrelic-install install && \
+        rm -rf /tmp/newrelic-php5-* /tmp/nrinstall*
+        
+# install docker
 RUN apt update && \
     apt install -y docker-ce --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN pip3 install awscli aws-sam-cli
+    rm -rf /var/lib/apt/lists/* && \
+    pip3 install awscli aws-sam-cli
